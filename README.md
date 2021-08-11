@@ -10,7 +10,7 @@ R code to prepare the input data for the Phase2.2 covid cooccurrence and embeddi
 ## 3. Run the following scripts in R:
 
 ```
-devtools::install_github("https://github.com/covidclinical/Phase2.2CovidEmbeddingRPackage", subdir="FourCePhase2.1CovidEmbedding", upgrade=FALSE, force=T)
+devtools::install_github("https://github.com/covidclinical/Phase2.2CovidEmbeddingRPackage", subdir="FourCePhase2.2CovidEmbedding", upgrade=FALSE, force=T)
 currSiteId = "MGB" ## change to your siteid
 dir.input="/Users/chuanhong/Documents/Input" ## change to your input directory
 dir.output="/Users/chuanhong/Documents/Output" ## change to your output directory
