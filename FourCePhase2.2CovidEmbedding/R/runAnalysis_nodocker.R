@@ -1,6 +1,6 @@
 
 runAnalysis_nodocker=function(siteid, dir.input){
-  data(icd_phecode_map, package="FourCePhase2.2CovidEmbedding")
+  data(icd.phecode.map, package="FourCePhase2.2CovidEmbedding")
   
   dat.po0=read.csv(paste0(dir.input,"/Phase22_LocalPatientObservations.csv"))
   dat.cc0=read.csv(paste0(dir.input,"/Phase22_LocalPatientClinicalCourse.csv"))
@@ -111,7 +111,7 @@ runAnalysis_nodocker=function(siteid, dir.input){
   dat.final=left_join(dat.final, map.date, by="days_since_admission")
   dat.final=dat.final[,setdiff(colnames(dat.final), c("concept_code", "days_since_admission"))]
   dat.final=dat.final[,c("patient_num", "date", "index")]
-  list(dat.final=dat.final, map.concept.code=map.cocept.code, map.date=map.date)
+  list(dat.final=dat.final, map.concept.code=map.concept.code, map.date=map.date)
 }
 
 
