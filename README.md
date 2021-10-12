@@ -41,9 +41,10 @@ colnames=[1,2,3]
 df = pd.read_csv('embeddingphase22.csv',header=None)
 del df[0]
 df=df.iloc[1:]
-df2[0]=df1[0].astype(np.int32)
+df['window']= np.full(df.shape[0], 30)
+df2=df.astype(np.int32)
 df2[1]=df2[1].astype(np.int64)
-df2.columns=['PatientOrder', 'NumDays', 'WordIndex']
+df2.columns=['PatientOrder', 'NumDays', 'WordIndex', 'window' ]
 df2.to_parquet('data_sort_out.parquet')
 ```
 
