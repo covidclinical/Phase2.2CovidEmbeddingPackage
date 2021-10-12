@@ -49,9 +49,9 @@ df2.to_parquet('data_sort_out.parquet')
 
 # 2. Run cooccurrence
 
-Please use the attached yaml file to create your environmen, that includes the packages necessary to run the tool.
+Please use the attached yaml file to create your environment. It includes the packages necessary to run the tool.
 
-To create the conda env, download the yml file to your machine and run the following terminal command :
+To create the conda environment, download the yml file to your machine and run the following terminal command :
 ```
 conda env create -f cooccurrence_env.yml
 ```
