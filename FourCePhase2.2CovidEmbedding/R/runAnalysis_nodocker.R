@@ -1,6 +1,7 @@
 
 runAnalysis_nodocker=function(siteid, dir.input){
   data(icd.phecode.map, package="FourCePhase2.2CovidEmbedding")
+  data(Labs_4CE, package="FourCePhase2.2CovidEmbedding")
   
   dat.po0=read.csv(paste0(dir.input,"/Phase22_LocalPatientObservations.csv"))
   dat.cc0=read.csv(paste0(dir.input,"/Phase22_LocalPatientClinicalCourse.csv"))
@@ -92,11 +93,28 @@ runAnalysis_nodocker=function(siteid, dir.input){
   
   ###
   cat("other codes \n")
-  dat.others=dat.po[grepl("DIAG-ICD",dat.po$concept_type)!=1 & dat.po$concept_type!="COVID-TEST",c("patient_num", "days_since_admission", "concept_code")]
+  dat.others=dat.po[grepl("DIAG-ICD",dat.po$concept_type)!=1 & 
+                      dat.po$concept_type!="COVID-TEST",c("patient_num", "days_since_admission", "concept_code")]
   
   ###
+  ## double check lab reference files
+  ## do we keep the other labs in the data? 
+  cat("labs \n")
+  dat.labs.ref = dat.lab.ref[,c('LOINC', 'Reference Low', 'Reference High')]
+  dat.labs=dat.po%>%filter(concept_type=='LAB-LOINC')%>%
+    select(patient_num, days_since_admission, concept_code, value)
+  dat.labs=left_join(dat.labs, dat.labs.ref, by=c('concept_code'='LOINC'))
+
+  dat.labs$flag=case_when(value<ref.l ~ 'L',
+                          value>ref.h ~ 'H',
+                          TRUE ~ 'N')
+  
+  dat.labs$concept_code_new = paste0(dat.labs$concept_code_new,'',dat.labs$flag)
+  
+  dat.labs=dat.labs[,c("patient_num", "days_since_admission", "concept_code_new")]
+  ###
   cat("combine all \n")
-  dat.final=rbind(dat.event,dat.age, dat.sex, dat.race, dat.icd,dat.others)
+  dat.final=rbind(dat.event,dat.age, dat.sex, dat.race, dat.icd, dat.others, dat.labs)
   dat.final=dat.final[order(dat.final$patient_num, dat.final$days_since_admission),]
   
   map.concept.code=unique(dat.final$concept_code)
